@@ -1,0 +1,8 @@
+# txt file
+sg_modules/*.txt
+
+# idea
+.idea
+
+# pycashe
+sg_modules/__pycache__
