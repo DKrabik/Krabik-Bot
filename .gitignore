@@ -5,4 +5,7 @@ sg_modules/*.txt
 .idea
 
 # pycashe
-sg_modules/__pycache__
+__pycache__
+
+#config
+config.py

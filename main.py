@@ -1,12 +1,13 @@
 import discord
+import os
 import asyncio
 from discord.ext import commands
+from config import *
 from sg_modules.parse import *
 
-TOKEN = 'Njc5MzYyMDkxNjAxMjMxODcy.Xr2pkQ.6TmkWNAg1XOyNOBrOM-bNKb--M0'
+TOKEN = os.environ.get('TOKEN') if os.environ.get('TOKEN') else TOKEN
 PREFIX = '.'
-NEWS_ID = 706513284383113316
-CLIPS_ID = 711891819750752297
+CLIPS_ID = os.environ.get('NEWS_ID') if os.environ.get('NEWS_ID') else NEWS_ID
 
 bot = commands.Bot(command_prefix=PREFIX)
 bot.remove_command('help')
@@ -45,12 +46,13 @@ async def help(ctx):
 # .sg_parse
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def sg_parse(ctx, delay):
+async def sg_parse(ctx):
     while True:
-        articles = parse()
-        last_article = ''
+        channel = bot.get_channel(NEWS_ID)
+        last_title = await (channel.fetch_message(channel.last_message_id))
+        last_title = last_title.embeds[0].title
+        articles = parse(last_title)
         if articles:
-            channel = bot.get_channel(NEWS_ID)
             for article in articles[::-1]:
                 if article['text'] is None:
                     await ctx.send(f'''"{article['title']}" не была опубликованна из-за больльшого количества символов''')
@@ -65,10 +67,8 @@ async def sg_parse(ctx, delay):
                     emb.description = article['text']
                     await channel.send(embed=emb)
                     await ctx.send(f'''"{article['title']}" - новость была успешно опубликованна''')
-                last_article = article['title']
-            open('sg_modules/Last_Article.txt', 'w').write(last_article)
         await ctx.send("Все новости опубликованны")
-        await asyncio.sleep(3600*int(delay))
+        await asyncio.sleep(3600*3)
 
 
 bot.run(TOKEN)

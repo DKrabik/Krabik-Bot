@@ -20,7 +20,7 @@ def get_random_color():
     return r * 65536 + g * 256 + b
 
 
-def get_content(response):
+def get_content(response, last_title):
     soup = BeautifulSoup(response, 'html.parser')
     items = soup.find_all('div', "item article-summary article-summary-card")
 
@@ -29,7 +29,7 @@ def get_content(response):
         link = 'https://stopgame.ru' + item.find('div', 'caption caption-bold').find_next('a').get('href')
         article_page = BeautifulSoup(get_html(link).text, 'html.parser')
         title = article_page.find('h1', 'article-title').get_text()
-        if title == str(open('sg_modules/Last_Article.txt', 'r').readline()):
+        if title == last_title:
             break
         else:
             print("Parsing " + str(items.index(item) + 1) + '/' + str(len(items)))
@@ -53,10 +53,10 @@ def get_content(response):
     return articles
 
 
-def parse():
+def parse(last_title):
     response = get_html(URL)
     if response.status_code == 200:
-        articles = get_content(response.text)
+        articles = get_content(response.text, last_title)
         return articles
     else:
         return 'Error'
