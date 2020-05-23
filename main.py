@@ -1,13 +1,13 @@
 import discord
-import os
+from os import environ
 import asyncio
 from discord.ext import commands
 from config import *
 from sg_modules.parse import *
 
-TOKEN = os.environ.get('TOKEN') if os.environ.get('TOKEN') else TOKEN
+TOKEN = environ.get('TOKEN') if environ.get('TOKEN') else TOKEN
 PREFIX = '.'
-CLIPS_ID = os.environ.get('NEWS_ID') if os.environ.get('NEWS_ID') else NEWS_ID
+CLIPS_ID = environ.get('NEWS_ID') if environ.get('NEWS_ID') else NEWS_ID
 
 bot = commands.Bot(command_prefix=PREFIX)
 bot.remove_command('help')
