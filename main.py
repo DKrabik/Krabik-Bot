@@ -4,9 +4,9 @@ import asyncio
 from discord.ext import commands
 from sg_modules.parse import parse
 
-TOKEN = environ.get('TOKEN') or 'Njc5MzYyMDkxNjAxMjMxODcy.XsfaBQ.GTmUmeTKiIP-PJKW-yp-NeCQyDA'
+TOKEN = environ.get('TOKEN')
 PREFIX = '.'
-NEWS_ID = int(environ.get('NEWS_ID')) or '706513284383113316'
+NEWS_ID = int(environ.get('NEWS_ID'))
 
 bot = commands.Bot(command_prefix=PREFIX)
 bot.remove_command('help')
