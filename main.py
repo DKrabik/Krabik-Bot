@@ -6,7 +6,7 @@ from sg_modules.parse import parse
 
 TOKEN = environ.get('TOKEN') 
 PREFIX = '.'
-CLIPS_ID = environ.get('NEWS_ID')
+NEWS_ID = environ.get('NEWS_ID')
 
 bot = commands.Bot(command_prefix=PREFIX)
 bot.remove_command('help')
