@@ -3,7 +3,7 @@ from os import environ
 import asyncio
 from discord.ext import commands
 from config import *
-from sg_modules.parse import *
+from sg_modules.parse import parse
 
 TOKEN = environ.get('TOKEN') if environ.get('TOKEN') else TOKEN
 PREFIX = '.'
