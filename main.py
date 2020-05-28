@@ -1,7 +1,7 @@
 import discord
 from os import environ
 import asyncio
-from discord.ext import commands
+from discord.ext import commands, tasks    
 from sg_modules.parse import parse
 
 TOKEN = environ.get('TOKEN')
@@ -14,7 +14,7 @@ bot.remove_command('help')
 
 @bot.event
 async def on_ready():
-    print('I`m ready!')
+    print("I'm ready!")
 
 
 # .english_motherfucker_do_you_speak_it
@@ -43,8 +43,7 @@ async def help(ctx):
 
 
 # .sg_parse
-@bot.command()
-@commands.has_permissions(administrator=True)
+@tasks.loop(hours = 3)
 async def sg_parse(ctx):
     while True:
         channel = bot.get_channel(NEWS_ID)
