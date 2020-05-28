@@ -53,7 +53,7 @@ async def sg_parse(ctx):
         if articles:
             for article in articles[::-1]:
                 if article['text'] is None:
-                    await ctx.send(f'''"{article['title']}" не была опубликованна из-за больльшого количества символов''')
+                    print(f'''"[log] {article['title']}" не была опубликованна из-за больльшого количества символов''')
                 else:
                     emb = discord.Embed(title=article['title'], colour=article['color'])
                     emb.set_author(name=article['author'], icon_url=article['author_img'])
@@ -64,8 +64,8 @@ async def sg_parse(ctx):
                         emb.set_image(url=article['img'])
                     emb.description = article['text']
                     await channel.send(embed=emb)
-                    await ctx.send(f'''"{article['title']}" - новость была успешно опубликованна''')
-        await ctx.send("Все новости опубликованны")
+                    print(f'''"[log] {article['title']}" - новость была успешно опубликованна''')
+        print("[log] Все новости опубликованны")
         await asyncio.sleep(3600*3)
 
 
