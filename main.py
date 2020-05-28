@@ -14,6 +14,7 @@ bot.remove_command('help')
 
 @bot.event
 async def on_ready():
+    sg_parse.start()
     print("I'm ready!")
 
 
@@ -44,7 +45,7 @@ async def help(ctx):
 
 # .sg_parse
 @tasks.loop(hours = 3)
-async def sg_parse(ctx):
+async def sg_parse():
     channel = bot.get_channel(NEWS_ID)
     last_title = await (channel.fetch_message(channel.last_message_id))
     last_title = last_title.embeds[0].title
