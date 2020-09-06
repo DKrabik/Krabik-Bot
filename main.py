@@ -18,13 +18,6 @@ async def on_ready():
     print("I'm ready!")
 
 
-# .english_motherfucker_do_you_speak_it
-@bot.command()
-async def english_motherfucker_do_you_speak_it(ctx):
-    author = ctx.message.author
-    await ctx.send(f'fuck you {author.mention}')
-
-
 # .clear
 @bot.command()
 @commands.has_permissions(administrator=True)
