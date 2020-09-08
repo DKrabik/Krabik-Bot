@@ -3,7 +3,7 @@ import random
 import math
 import re
 from bs4 import BeautifulSoup
-from sg_modules.editor import edit_text
+from sg_modules.editor import edit_text, edit_date
 
 URL = 'https://stopgame.ru/news'
 HEADERS = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0',
@@ -23,8 +23,7 @@ def get_random_color():
 
 def get_content_from_sg(response, last_title):
     soup = BeautifulSoup(response, 'html.parser')
-    items = soup.find_all('div', "item article-summary article-summary-card")
-
+    items = soup.find_all('div', "item article-summary")
     articles = []
     for item in items:
         link = 'https://stopgame.ru' + item.find('div', 'caption caption-bold').find_next('a').get('href')
@@ -41,7 +40,7 @@ def get_content_from_sg(response, last_title):
         author_img = re.findall(r'(https.+.[jpeg|jpg])', article_page.find('div', 'photo').get('style'))[0]
         articles.append({
             'title': title,
-            'date': article_page.find_all('div', 'article-info-item')[1].get_text(),
+            'date': edit_date(article_page.find_all('div', 'article-info-item')[1].get_text()),
             "tags": item.find('div', 'tags').get_text(),
             "link": link,
             "author": article_page.find('a', 'name').get_text(),
