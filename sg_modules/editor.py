@@ -1,6 +1,4 @@
-import locale
 import datetime
-locale.setlocale(locale.LC_ALL, "ru")
 
 def edit_text(text):
     if len(text) < 2000:
@@ -10,10 +8,10 @@ def edit_text(text):
 
 def edit_date(date):
     if date == "Сегодня":
-        return datetime.date.today().strftime("%d %B %Yг.")
+        return datetime.date.today().strftime("%d.%m.%Yг.")
     elif date == "Вчера":
         today = datetime.datetime.today()
         delta = datetime.timedelta(days = 1)
-        return (today - delta).strftime("%d %B %Yг.")
+        return (today - delta).strftime("%d.%m.%Y")
     else:
         return date
