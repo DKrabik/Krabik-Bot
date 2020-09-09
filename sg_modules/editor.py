@@ -8,7 +8,7 @@ def edit_text(text):
 
 def edit_date(date):
     if date == "Сегодня":
-        return datetime.date.today().strftime("%d.%m.%Yг.")
+        return datetime.date.today().strftime("%d.%m.%Y")
     elif date == "Вчера":
         today = datetime.datetime.today()
         delta = datetime.timedelta(days = 1)
