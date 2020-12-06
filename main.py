@@ -17,6 +17,13 @@ async def on_ready():
     sg_parse.start()
     print("I'm ready!")
 
+@bot.event
+async def on_voice_state_update(member, before, after):
+    rand = choice([True,False])
+    if (not before.channel and after.channel and rand):
+        await member.move_to(None);
+        await member.send(f"Ops.. I did it again. Try again :crab:")
+
 
 # .clear
 @bot.command()
