@@ -1,6 +1,7 @@
 import discord
-from os import environ
 import asyncio
+from random import choice
+from os import environ
 from discord.ext import commands, tasks    
 from sg_modules.parse import parse
 
