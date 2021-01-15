@@ -1,8 +1,7 @@
 import discord
-import asyncio
 from random import choice
 from os import environ
-from discord.ext import commands, tasks    
+from discord.ext import commands, tasks
 from sg_modules.parse import parse
 
 TOKEN = environ.get('TOKEN')
@@ -10,7 +9,6 @@ PREFIX = '.'
 NEWS_ID = int(environ.get('NEWS_ID'))
 
 bot = commands.Bot(command_prefix=PREFIX)
-bot.remove_command('help')
 
 
 @bot.event
@@ -18,11 +16,12 @@ async def on_ready():
     sg_parse.start()
     print("I'm ready!")
 
+
 @bot.event
 async def on_voice_state_update(member, before, after):
-    rand = choice([True,False])
-    if (not before.channel and after.channel and rand):
-        await member.move_to(None);
+
+    if not before.channel and not member.bot and after.channel and choice([True, False]):
+        await member.move_to(None)
         await member.send(f"Ops.. I did it again. Try again :crab:")
 
 
@@ -33,19 +32,8 @@ async def clear(ctx, amount=100):
     await ctx.channel.purge(limit=amount)
 
 
-# .help
-@bot.command()
-async def help(ctx):
-    emb = discord.Embed(title='Навигация по командам', colour=0x00FF00)
-    emb.add_field(name='{}sg_parse(admin)'.format(PREFIX), value='Постить все новые новости из сайта StopGame.com',
-                  inline=False)
-    emb.add_field(name='{}clear(admin)'.format(PREFIX), value='Очистка чата', inline=False)
-    emb.add_field(name='{}english_motherfucker_do_you_speak_it'.format(PREFIX), value='Проверь сам', inline=False)
-    await ctx.author.send(embed=emb)
-
-
 # .sg_parse
-@tasks.loop(hours = 3)
+@tasks.loop(hours=3)
 async def sg_parse():
     channel = bot.get_channel(NEWS_ID)
     last_title = await (channel.fetch_message(channel.last_message_id))
