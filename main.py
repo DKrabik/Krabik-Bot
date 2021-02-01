@@ -83,7 +83,7 @@ async def sg_parse():
                     emb.description = article['text']
                     await channel.send(embed=emb)
                     print(f'''"[log] {article['title']}" - новость была успешно опубликованна''')
-            mypsql_commands.query(connection, f"UPDATE settings SET last_article = \"{articles[0]['title']}\" WHERE server_id = {setting[0]}")        
+            mypsql_commands.query(connection, f"UPDATE settings SET last_article = \'{articles[0]['title']}\' WHERE server_id = {setting[0]}")        
         print("[log] Все новости опубликованны")
 
 
