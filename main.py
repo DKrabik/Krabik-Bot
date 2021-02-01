@@ -65,7 +65,7 @@ async def set_news_chat_id(ctx, msg = None):
 @tasks.loop(hours=3)
 async def sg_parse():
     for setting in mypsql_commands.query(connection, "SELECT server_id, news_chat_id, last_article FROM settings WHERE news_chat_id IS NOT NULL;", get=True):
-        channel = setting[1]
+        channel = bot.get_channel(setting[1])
         last_title = setting[2]
         articles = parse(last_title)
         if articles:
