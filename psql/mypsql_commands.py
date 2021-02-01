@@ -16,12 +16,12 @@ def create_connection(host_name, user_name, user_password, db_name = None):
 
     return connection
 
-def query(connection, query):
+def query(connection, query, get = False):
     cursor = connection.cursor()
     temp = False
     try:
         cursor.execute(query)
-        if (query.find("INSERT") and query.find("UPDATE")):
+        if (get):
             temp = cursor.fetchall()
         print(f"{query} - Query successful")
     except Error as e:
@@ -29,13 +29,11 @@ def query(connection, query):
     finally:
         return temp
 
-def select_from_settings(connection, select, server_id):
-    return query(connection, f'SELECT {select} FROM settings WHERE server_id = {server_id};')[0][0]
+        
 
+def select_from_settings(connection, select, server_id):
+    return query(connection, f'SELECT {select} FROM settings WHERE server_id = {server_id};', get=True)[0][0]
+    
 def change_settings(connection, update, param, server_id):
     return query(connection, f'UPDATE settings SET {update} = {param} WHERE server_id = {server_id}')
 
-    
-
-
-    

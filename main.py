@@ -12,8 +12,8 @@ USER = environ.get('USER')
 PASSWORD = environ.get('PASSWORD')
 DATABASE = environ.get('DATABASE')
 
-
-bot = commands.Bot(command_prefix=PREFIX)
+intents = discord.Intents()
+bot = commands.Bot(command_prefix=PREFIX, intents=intents.all())
 connection = mypsql_commands.create_connection(HOST, USER, PASSWORD, DATABASE)
 connection.autocommit = True
 
@@ -25,7 +25,7 @@ async def on_ready():
         for guild in bot.guilds:
             for member in guild.members:
                 if not member.bot:
-                    if (not mypsql_commands.query(connection, f'SELECT user_id, server_id FROM users WHERE user_id = {member.id} AND server_id = {member.guild.id} ;')):
+                    if (not mypsql_commands.query(connection, f'SELECT user_id, server_id FROM users WHERE user_id = {member.id} AND server_id = {member.guild.id} ;', get=True)):
                         mypsql_commands.query(connection, f"INSERT INTO users(user_id, server_id, nickname, money) VALUES ({member.id}, {member.guild.id}, '{member}', 0)")             
         mypsql_commands.query(connection, f"INSERT INTO settings(server_id) VALUES ({guild.id}) ON CONFLICT (server_id) DO NOTHING;")
     sg_parse.start()
@@ -63,10 +63,10 @@ async def set_news_chat_id(ctx, msg = None):
 
 # .sg_parse
 @tasks.loop(hours=3)
-async def sg_parse(ctx):
-    if (mypsql_commands.select_from_settings(connection, "news_chat_id", ctx.guild.id) == None):
-        channel = mypsql_commands.select_from_settings(connection, "news_chat_id", ctx.guild.id)
-        last_title = mypsql_commands.select_from_settings(connection, "last_article", ctx.guild.id)
+async def sg_parse():
+    for setting in mypsql_commands.query(connection, "SELECT server_id, news_chat_id, last_article FROM settings WHERE news_chat_id IS NOT NULL;", get=True):
+        channel = setting[1]
+        last_title = setting[2]
         articles = parse(last_title)
         if articles:
             for article in articles[::-1]:
@@ -83,7 +83,7 @@ async def sg_parse(ctx):
                     emb.description = article['text']
                     await channel.send(embed=emb)
                     print(f'''"[log] {article['title']}" - новость была успешно опубликованна''')
-            mypsql_commands.change_settings(connection, "last_article", articles[0], ctx.guild.id)
+            mypsql_commands.query(connection, f"UPDATE settings SET last_article = {articles[0]['title']} WHERE server_id = {setting[0]}")        
         print("[log] Все новости опубликованны")
 
 
