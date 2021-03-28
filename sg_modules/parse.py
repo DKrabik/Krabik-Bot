@@ -22,34 +22,37 @@ def get_random_color():
 
 
 def get_content_from_sg(response, last_title):
-    soup = BeautifulSoup(response, 'html.parser')
-    items = soup.find_all('div', "item article-summary")
-    articles = []
-    for item in items:
-        link = 'https://stopgame.ru' + item.find('div', 'caption caption-bold').find_next('a').get('href')
-        article_page = BeautifulSoup(get_html(link).text, 'html.parser')
-        title = article_page.find('h1', 'article-title').get_text()
-        if title == last_title:
-            break
-        else:
-            print("Parsing " + str(items.index(item) + 1) + '/' + str(len(items)))
-        
-        text = '\n'.join([p.get_text() for p in article_page.find('section', 'article').find_all('p') if
-                          not p.get('class') and (
-                                      (p.find('a') and "https://t.co/" not in p.find('a').get('href')) or not p.find('a'))])
-        author_img = re.findall(r'(https.+.[jpeg|jpg])', article_page.find('div', 'photo').get('style'))[0]
-        articles.append({
-            'title': title,
-            'date': edit_date(article_page.find_all('div', 'article-info-item')[1].get_text()),
-            "tags": item.find('div', 'tags').get_text(),
-            "link": link,
-            "author": article_page.find('a', 'name').get_text(),
-            "author_img": author_img,
-            "text": edit_text(text),
-            "color": get_random_color(),
-            "img": item.find('div', 'image lazy').get('data-src')
-        })
-    return articles
+    try:
+        soup = BeautifulSoup(response, 'html.parser')
+        items = soup.find_all('div', "item article-summary")
+        articles = []
+        for item in items:
+            link = 'https://stopgame.ru' + item.find('div', 'caption caption-bold').find_next('a').get('href')
+            article_page = BeautifulSoup(get_html(link).text, 'html.parser')
+            title = article_page.find('h1', 'article-title').get_text()
+            if title == last_title:
+                break
+            else:
+                print("Parsing " + str(items.index(item) + 1) + '/' + str(len(items)))
+            
+            text = '\n'.join([p.get_text() for p in article_page.find('section', 'article').find_all('p') if
+                            not p.get('class') and (
+                                        (p.find('a') and "https://t.co/" not in p.find('a').get('href')) or not p.find('a'))])
+            author_img = re.findall(r'(https.+.[jpeg|jpg])', article_page.find('div', 'photo').get('style'))[0]
+            articles.append({
+                'title': title,
+                'date': edit_date(article_page.find_all('div', 'article-info-item')[1].get_text()),
+                "tags": item.find('div', 'tags').get_text(),
+                "link": link,
+                "author": article_page.find('a', 'name').get_text(),
+                "author_img": author_img,
+                "text": edit_text(text),
+                "color": get_random_color(),
+                "img": item.find('div', 'image lazy').get('data-src')
+            })
+        return articles
+    except Exception:
+        return []
 
 
 def parse(last_title):
