@@ -48,11 +48,13 @@ def get_content_from_sg(response, last_title):
                 "author_img": author_img,
                 "text": edit_text(text),
                 "color": get_random_color(),
-                "img": item.find('div', 'image lazy').get('data-src')
+                "img": item.find('div', 'image-16x9').get('src')
             })
         return articles
-    except Exception:
+    except Exception as e:
+        print (e)
         return []
+        
 
 
 def parse(last_title):
