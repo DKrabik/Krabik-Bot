@@ -48,7 +48,7 @@ def get_content_from_sg(response, last_title):
                 "author_img": author_img,
                 "text": edit_text(text),
                 "color": get_random_color(),
-                "img": item.find('div', 'image-16x9').get('src')
+                "img": item.find('img', 'image-16x9').get('src')
             })
         return articles
     except Exception as e:
