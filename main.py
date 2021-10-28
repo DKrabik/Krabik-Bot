@@ -35,7 +35,7 @@ async def on_ready():
 @bot.event
 async def on_voice_state_update(member, before, after):
 
-    if not before.channel and not member.bot and after.channel and choice([True, False, False, False]):
+    if not before.channel and not member.bot and after.channel and choice([True, True, True, False]):
         await member.move_to(None)
         await member.send(f"Ops.. I did it again. Try again :crab:")
 
