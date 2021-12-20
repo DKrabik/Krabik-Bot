@@ -34,9 +34,9 @@ async def on_ready():
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if member.id in [440050080968605696, 417248973548683265, 416229787997175820]:
+    if member.id in [440050080968605696, 417248973548683265, 416229787997175820, 468456019853443095]:
         print(randint(1,100)==1)
-        if not before.channel and not member.bot and after.channel and (randint(1,100)!=1):
+        if not before.channel and not member.bot and after.channel and not(randint(1,100)==1):
             await member.move_to(None)
             await member.send(f"Пошел нахуй, пидарас! Удачи тебе зайти с шансом 1%")
     else:
