@@ -35,14 +35,15 @@ async def on_ready():
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    role_get = get(member.guild.roles, id=922565856196694036)
+    role_get = get(member.roles, id=922565856196694036)
     if role_get:
-        if not before.channel and not member.bot and after.channel and not(randint(1,100)==1):
-            await member.move_to(None)
-            await member.send(f"Пошел нахуй, пидарас! Удачи тебе зайти с шансом 1%")
-        else:
-            await member.remove_roles(role_get)
-            await member.send(f"Проклятие снято, пидор!")
+        if not before.channel and not member.bot and after.channel:
+            if not(randint(1,100)==1):
+                await member.move_to(None)
+                await member.send(f"Пошел нахуй, пидарас! Удачи тебе зайти с шансом 1%")
+            else:
+                await member.remove_roles(role_get)
+                await member.send(f"Проклятие снято, пидор!")
     else:
         if not before.channel and not member.bot and after.channel and choice([True, False]):
             await member.move_to(None)
