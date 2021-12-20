@@ -2,6 +2,7 @@ import discord
 from random import choice, randint
 from os import environ
 from discord.ext import commands, tasks
+from discord.utils import get
 from sg_modules.parse import parse
 from psql import mypsql_commands
 
@@ -34,10 +35,14 @@ async def on_ready():
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if member.id in [440050080968605696, 417248973548683265, 416229787997175820]:
+    role_get = get(member.guild.roles, id=922565856196694036)
+    if role_get:
         if not before.channel and not member.bot and after.channel and not(randint(1,100)==1):
             await member.move_to(None)
             await member.send(f"Пошел нахуй, пидарас! Удачи тебе зайти с шансом 1%")
+        else:
+            await member.remove_roles(role_get)
+            await member.send(f"Проклятие снято, пидор!")
     else:
         if not before.channel and not member.bot and after.channel and choice([True, False]):
             await member.move_to(None)
